@@ -1,62 +1,38 @@
 #include<stdio.h>
-#include<ctype.h>
 
-char production[10][10], result[10];
-int count, size = 0;
+void findFirst(char symbol);
 
-int alreadyPresent(char ch){
-    for(int i=0;i<size;i++)
-        if(result[i]==ch) return 1;
+int main()
+{
+    printf("FIRST(E) = { ");
+    findFirst('E');
+    printf(" }\n");
+
+    printf("FIRST(T) = { ");
+    findFirst('T');
+    printf(" }\n");
+
+    printf("FIRST(F) = { ");
+    findFirst('F');
+    printf(" }\n");
+
     return 0;
 }
 
-void findFirst(char symbol){
-    for(int i=0;i<count;i++){
-        if(production[i][0] == symbol){
+void findFirst(char symbol)
+{
+    switch(symbol)
+    {
+        case 'E':
+            findFirst('T');
+            break;
 
-            for(int j=2; production[i][j] != '\0'; j++){
-                char next = production[i][j];
+        case 'T':
+            findFirst('F');
+            break;
 
-                if(!isupper(next)){   // terminal
-                    if(!alreadyPresent(next))
-                        result[size++] = next;
-                    break;
-                }
-                else{                 // non-terminal
-                    findFirst(next);
-                    break;  // simplified (no full epsilon chain handling)
-                }
-            }
-        }
+        case 'F':
+            printf("( , id ");
+            break;
     }
-}
-
-int main(){
-    int choice;
-    char symbol;
-
-    printf("Enter number of productions: ");
-    scanf("%d",&count);
-
-    printf("Enter productions:\n");
-    for(int i=0;i<count;i++)
-        scanf("%s",production[i]);
-
-    do{
-        size = 0;
-
-        printf("\nEnter non-terminal: ");
-        scanf(" %c",&symbol);
-
-        findFirst(symbol);
-
-        printf("FIRST(%c) = { ",symbol);
-        for(int i=0;i<size;i++)
-            printf("%c ",result[i]);
-        printf("}\n");
-
-        printf("1-continue 0-exit: ");
-        scanf("%d",&choice);
-
-    }while(choice==1);
 }
