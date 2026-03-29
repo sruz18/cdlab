@@ -1,53 +1,39 @@
-
+Week-06
+implement type checking
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 
-int isInteger(char str[]) {
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (!isdigit(str[i])) return 0;
+int main()
+{
+    char type1[10], type2[10], op;
+
+    printf("Enter first operand type (int/float/char): ");
+    scanf("%s", type1);
+
+    printf("Enter operator (+, -, *, /): ");
+    scanf(" %c", &op);
+
+    printf("Enter second operand type (int/float/char): ");
+    scanf("%s", type2);
+
+    // Type checking
+    if(strcmp(type1,"int")==0 && strcmp(type2,"int")==0)
+    {
+        printf("Valid Expression: Result type is int\n");
     }
-    return 1;
-}
-
-int isFloat(char str[]) {
-    int dot = 0;
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '.') dot++;
-        else if (!isdigit(str[i])) return 0;
+    else if((strcmp(type1,"int")==0 && strcmp(type2,"float")==0) ||
+            (strcmp(type1,"float")==0 && strcmp(type2,"int")==0) ||
+            (strcmp(type1,"float")==0 && strcmp(type2,"float")==0))
+    {
+        printf("Valid Expression: Result type is float\n");
     }
-    return (dot == 1);
-}
-
-int main() {
-    char type[10], var[10], value[20];
-
-    printf("Enter declaration (e.g., int a = 10):\n");
-    scanf("%s %s = %s", type, var, value);
-
-    if (strcmp(type, "int") == 0) {
-        if (isInteger(value))
-            printf("Valid assignment\n");
-        else
-            printf("Type Error\n");
+    else if(strcmp(type1,"char")==0 || strcmp(type2,"char")==0)
+    {
+        printf("Type Error: Operation not allowed with char type\n");
     }
-
-    else if (strcmp(type, "float") == 0) {
-        if (isFloat(value) || isInteger(value))
-            printf("Valid assignment\n");
-        else
-            printf("Type Error\n");
-    }
-
-    else if (strcmp(type, "char") == 0) {
-        if (strlen(value) == 3 && value[0] == '\'' && value[2] == '\'')
-            printf("Valid assignment\n");
-        else
-            printf("Type Error\n");
-    }
-
-    else {
-        printf("Unknown Type\n");
+    else
+    {
+        printf("Invalid Types\n");
     }
 
     return 0;
