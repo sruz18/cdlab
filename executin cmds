@@ -1,0 +1,4 @@
+bison -y -d -o y.tab.c file_name.y-->(yacc file)
+lex file_name.l -->(lex file)
+gcc y.tab.c lex.yy.c -o program
+ .\program
