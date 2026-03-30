@@ -1,0 +1,103 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+struct Symbol {
+    char name[10];
+    int address;
+} table[20];
+
+int total = 0, i, j;
+
+int search(char key[]) {
+    for(i = 1; i <= total; i++) {
+        if(strcmp(table[i].name, key) == 0)
+            return i;
+    }
+    return 0;
+}
+
+void create() {
+    printf("Enter number of entries: ");
+    scanf("%d", &total);
+
+    for(i = 1; i <= total; i++) {
+        printf("Enter symbol and address: ");
+        scanf("%s %d", table[i].name, &table[i].address);
+
+        if(table[i].name[0] >= '0' && table[i].name[0] <= '9') {
+            printf("Symbol must start with alphabet\n");
+            i--;
+            continue;
+        }
+
+        for(j = 1; j < i; j++) {
+            if(strcmp(table[i].name, table[j].name) == 0) {
+                printf("Duplicate symbol\n");
+                i--;
+            }
+        }
+    }
+}
+
+void insert() {
+    if(total >= 20) {
+        printf("Table is full\n");
+        return;
+    }
+
+    total++;
+    printf("Enter symbol and address: ");
+    scanf("%s %d", table[total].name, &table[total].address);
+}
+
+void modify() {
+    char key[10];
+    printf("Enter symbol to modify: ");
+    scanf("%s", key);
+
+    int pos = search(key);
+
+    if(pos == 0) {
+        printf("Symbol not found\n");
+        return;
+    }
+
+    printf("Enter new symbol and address: ");
+    scanf("%s %d", table[pos].name, &table[pos].address);
+}
+
+void display() {
+    printf("\nSymbol\tAddress\n");
+    for(i = 1; i <= total; i++) {
+        printf("%s\t%d\n", table[i].name, table[i].address);
+    }
+}
+
+int main() {
+    int choice, pos;
+    char key[10];
+
+    while(1) {
+        printf("\n1.Create 2.Insert 3.Modify 4.Search 5.Display 6.Exit\n");
+        scanf("%d", &choice);
+
+        switch(choice) {
+            case 1: create(); break;
+            case 2: insert(); break;
+            case 3: modify(); break;
+            case 4:
+                printf("Enter symbol to search: ");
+                scanf("%s", key);
+                pos = search(key);
+                if(pos == 0)
+                    printf("Symbol not found\n");
+                else
+                    printf("Found at %d, Address=%d\n", pos, table[pos].address);
+                break;
+            case 5: display(); break;
+            case 6: exit(0);
+            default: printf("Invalid choice\n");
+        }
+    }
+}
