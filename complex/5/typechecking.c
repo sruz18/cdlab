@@ -1,5 +1,3 @@
-Week-06
-implement type checking
 #include <stdio.h>
 #include <string.h>
 

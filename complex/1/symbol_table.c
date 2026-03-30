@@ -1,177 +1,71 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX 50
+struct sym {
+    char name[20];
+    int addr;
+} s[50];
 
-struct Symbol {
-    char label[50];
-    int address;
-};
+int n = 0;
 
-struct Symbol table[MAX];
-int count = 0;
-
-// SEARCH FUNCTION
-int search(char lab[]) {
-    for (int i = 0; i < count; i++) {
-        if (strcmp(table[i].label, lab) == 0) {
+// search
+int search(char name[]) {
+    for(int i = 0; i < n; i++)
+        if(strcmp(s[i].name, name) == 0)
             return i;
-        }
-    }
     return -1;
 }
 
-// INSERT
-void insert() {
-    char lab[50];
-    int addr;
-
-    printf("Enter symbol (label): ");
-    scanf("%s", lab);
-
-    int pos = search(lab);
-
-    if (pos != -1) {
-        printf("Duplicate Symbol\n");
-        return;
-    }
-
-    printf("Enter address: ");
-    scanf("%d", &addr);
-
-    strcpy(table[count].label, lab);
-    table[count].address = addr;
-    count++;
-
-    printf("Symbol inserted successfully\n");
-}
-
-// DISPLAY
-void display() {
-    if (count == 0) {
-        printf("Symbol table is empty\n");
-        return;
-    }
-
-    printf("\nSymbol Table:\n");
-    printf("Label\tAddress\n");
-
-    for (int i = 0; i < count; i++) {
-        printf("%s\t%d\n", table[i].label, table[i].address);
-    }
-}
-
-// DELETE
-void deleteSymbol() {
-    char lab[50];
-    printf("Enter symbol to delete: ");
-    scanf("%s", lab);
-
-    int pos = search(lab);
-
-    if (pos == -1) {
-        printf("Label Not found\n");
-        return;
-    }
-
-    for (int i = pos; i < count - 1; i++) {
-        table[i] = table[i + 1];
-    }
-
-    count--;
-    printf("Symbol deleted successfully\n");
-}
-
-// MODIFY
-void modify() {
-    char lab[50];
-    printf("Enter symbol to modify: ");
-    scanf("%s", lab);
-
-    int pos = search(lab);
-
-    if (pos == -1) {
-        printf("Label Not found\n");
-        return;
-    }
-
-    int choice;
-    printf("1. Modify Label\n2. Modify Address\n3. Modify Both\n");
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
-
-    if (choice == 1 || choice == 3) {
-        char newlab[50];
-        printf("Enter new label: ");
-        scanf("%s", newlab);
-
-        if (search(newlab) != -1) {
-            printf("Duplicate Symbol\n");
-            return;
-        }
-
-        strcpy(table[pos].label, newlab);
-    }
-
-    if (choice == 2 || choice == 3) {
-        int newaddr;
-        printf("Enter new address: ");
-        scanf("%d", &newaddr);
-
-        table[pos].address = newaddr;
-    }
-
-    printf("Symbol modified successfully\n");
-}
-
-// MAIN
 int main() {
-    int choice;
+    int ch, pos;
+    char name[20];
 
-    while (1) {
-        printf("\n--- Symbol Table Menu ---\n");
-        printf("1. Insert\n2. Display\n3. Delete\n4. Search\n5. Modify\n6. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+    while(1) {
+        printf("\n1.Insert 2.Display 3.Search 4.Delete 5.Modify 6.Exit\n");
+        scanf("%d", &ch);
 
-        switch (choice) {
-            case 1:
-                insert();
-                break;
-
-            case 2:
-                display();
-                break;
-
-            case 3:
-                deleteSymbol();
-                break;
-
-            case 4: {
-                char lab[50];
-                printf("Enter symbol to search: ");
-                scanf("%s", lab);
-
-                int pos = search(lab);
-                if (pos == -1) {
-                    printf("Symbol not found\n");
-                } else {
-                    printf("Found: %s at address %d\n",
-                           table[pos].label,
-                           table[pos].address);
-                }
-                break;
-            }
-
-            case 5:
-                modify();
-                break;
-
-            case 6:
-                return 0;
-
-            default:
-                printf("Invalid choice\n");
+        if(ch == 1) {
+            printf("Enter name and address: ");
+            scanf("%s %d", s[n].name, &s[n].addr);
+            n++;
         }
+
+        else if(ch == 2) {
+            for(int i = 0; i < n; i++)
+                printf("%s %d\n", s[i].name, s[i].addr);
+        }
+
+        else if(ch == 3) {
+            printf("Enter name: ");
+            scanf("%s", name);
+            pos = search(name);
+            if(pos == -1) printf("Not found\n");
+            else printf("Found at %d\n", s[pos].addr);
+        }
+
+        else if(ch == 4) {
+            printf("Enter name: ");
+            scanf("%s", name);
+            pos = search(name);
+            if(pos != -1) {
+                for(int i = pos; i < n-1; i++)
+                    s[i] = s[i+1];
+                n--;
+            }
+        }
+
+        else if(ch == 5) {
+            printf("Enter name: ");
+            scanf("%s", name);
+            pos = search(name);
+            if(pos != -1) {
+                printf("Enter new address: ");
+                scanf("%d", &s[pos].addr);
+            }
+        }
+
+        else if(ch == 6) break;
     }
+
+    return 0;
 }
