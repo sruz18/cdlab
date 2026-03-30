@@ -1,30 +1,45 @@
 %{
-#include <stdio.h>
-int yylex(void);
-void yyerror(const char *s);
+    #include <stdio.h>
+    #include <stdlib.h>
+
+
+    int yylex();
+    int yyerror(char const *c);
 %}
 
+
+%token ID
+
+%left '+'
+%left  '*'
+
 %%
-S : A B
-  | A
+S : E '\n'   { return 0; }
   ;
 
-A : 'a' A
-  | 'a'
+E : E '+' T
+  | T
   ;
 
-B : 'b' B
-  | 'b'
+T : F '*' T
+  | F
+  ;
+
+F : '(' E ')'
+  | ID
   ;
 %%
 
-int main() {
-    printf("Enter string:\n");
-    if (yyparse() == 0)
-        printf("Valid String\n");
+
+int main(){
+    printf("Enter the Expression:");
+    if(yyparse()==0){
+        printf("Valid\n");
+    }
     return 0;
 }
 
-void yyerror(const char *s) {
-    printf("Invalid String\n");
+int yyerror(char const *s){
+    printf("Invalid!\n");
+    return 1;
 }
