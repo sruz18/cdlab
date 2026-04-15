@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <string.h>
+
+struct sym {
+    char name[20];
+    int addr;
+} s[50];
+
+int n = 0;
+
+// Search Function
+int search(char name[]) {
+    for(int i = 0; i < n; i++)
+        if(strcmp(s[i].name, name) == 0)
+            return i;
+    return -1;
+}
+
+// Insert Function
+void insert() {
+    printf("Enter name and address: ");
+    scanf("%s %d", s[n].name, &s[n].addr);
+    n++;
+}
+
+// Display Function
+void display() {
+    printf("Displaying Records:\n");
+    for(int i = 0; i < n; i++)
+        printf("%s %d\n", s[i].name, s[i].addr);
+}
+
+// Search Function
+void searchRecord() {
+    char name[20];
+    printf("Enter name: ");
+    scanf("%s", name);
+
+    int pos = search(name);
+    if(pos == -1) printf("Not found\n");
+    else printf("Found at address %d\n", s[pos].addr);
+}
+
+// Delete Function
+void deleteRecord() {
+    char name[20];
+    printf("Enter name: ");
+    scanf("%s", name);
+
+    int pos = search(name);
+    if(pos != -1) {
+        for(int i = pos; i < n-1; i++)
+            s[i] = s[i+1];
+        n--;
+        printf("Deleted successfully\n");
+    } else {
+        printf("Not found\n");
+    }
+}
+
+// Modify Function
+void modify() {
+    char name[20];
+    printf("Enter name: ");
+    scanf("%s", name);
+
+    int pos = search(name);
+    if(pos != -1) {
+        printf("Enter new address: ");
+        scanf("%d", &s[pos].addr);
+        printf("Updated successfully\n");
+    } else {
+        printf("Not found\n");
+    }
+}
+
+int main() {
+    int ch;
+
+    while(1) {
+        printf("\n1.Insert 2.Display 3.Search 4.Delete 5.Modify 6.Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+
+        printf("You selected option: %d\n", ch);
+
+        switch(ch) {
+            case 1: insert(); break;
+            case 2: display(); break;
+            case 3: searchRecord(); break;
+            case 4: deleteRecord(); break;
+            case 5: modify(); break;
+            case 6: return 0;
+            default: printf("Invalid choice\n");
+        }
+    }
+}
